@@ -1,5 +1,5 @@
 import React, { useRef, useContext } from "react";
-import "./style.css";
+import "./style.scss";
 import { login } from "../../utility";
 import { Context } from "../../store/store";
 
@@ -24,22 +24,25 @@ export default () => {
 		});
 	};
 	return (
-		<form onSubmit={handleSubmit}>
-			<div>
-				<label>User Id</label>
-				<input
-					type="text"
-					onChange={(e) => (user_id.current = e.target.value)}
-				/>
+		<form onSubmit={handleSubmit} className="login">
+			<div className="form-wrapper">
+				<h1>Login</h1>
+				<div className="input-wrapper">
+					<label>User Id</label>
+					<input
+						type="text"
+						onChange={(e) => (user_id.current = e.target.value)}
+					/>
+				</div>
+				<div className="input-wrapper">
+					<label>Password</label>
+					<input
+						type="password"
+						onChange={(e) => (password.current = e.target.value)}
+					/>
+				</div>
+				<button type="submit">Submit</button>
 			</div>
-			<div>
-				<label>Password</label>
-				<input
-					type="password"
-					onChange={(e) => (password.current = e.target.value)}
-				/>
-			</div>
-			<button type="submit">Submit</button>
 		</form>
 	);
 };

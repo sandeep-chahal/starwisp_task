@@ -11,7 +11,6 @@ function App() {
 	useEffect(() => {
 		getUser(dispatch);
 	}, []);
-	return <Spinner />;
 	return (
 		<div className="App">
 			{state.initialLoad ? <Spinner /> : state.user ? <Dashboard /> : <Login />}
