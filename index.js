@@ -39,7 +39,6 @@ app.post("/login", (req, res, next) => {
 	const user_id = req.body.user_id;
 	const password = req.body.password;
 
-	console.log(user_id, password);
 	try {
 		db.query(
 			"SELECT * from user_id WHERE user_id = ?",
@@ -76,7 +75,6 @@ app.post("/edit-details", (req, res, next) => {
 		[data, data.uid],
 		(err, result) => {
 			console.log(err);
-			console.log(result);
 		}
 	);
 	res.json({ error: false, msg: "success" });
