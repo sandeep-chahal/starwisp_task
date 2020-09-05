@@ -69,6 +69,18 @@ app.get("/logout", (req, res, next) => {
 	res.cookie("jwtToken", "");
 	res.json({ error: false, msg: "success" });
 });
+app.post("/edit-details", (req, res, next) => {
+	const data = req.body.data;
+	db.query(
+		"UPDATE uni_details SET ? WHERE uid = ?",
+		[data, data.uid],
+		(err, result) => {
+			console.log(err);
+			console.log(result);
+		}
+	);
+	res.json({ error: false, msg: "success" });
+});
 app.get("/delete-detail", (req, res, next) => {
 	const uid = req.query.uid;
 	console.log(uid);
@@ -84,7 +96,9 @@ app.post("/add-details", authenticate, async (req, res, next) => {
 			return res
 				.status(400)
 				.json({ error: true, msg: "Please Enter Valid Data" });
-		const query = "INSERT INTO uni_details VALUES (?)";
+		const query = "INSERT INTO uni_details SET ?";
+		// const query =
+		// 	"INSERT INTO uni_details(`uid`, `uni_name`, `reg_date`, `exp_date`, `web_url`, `num_of_students`, `email`, `img_url`, `contact_num`) VALUES (?)";
 		db.query(query, data, (err, result) => {
 			if (err) {
 				console.log(err);

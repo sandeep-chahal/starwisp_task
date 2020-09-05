@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import "./style.scss";
 import { getDetails, deleteDetail } from "../../utility";
 import Popup from "../popup";
+import AddForm from "../AddForm";
 
 export default function ViewDetails() {
 	const [data, setData] = useState(null);
@@ -9,6 +10,7 @@ export default function ViewDetails() {
 	const [page, setPage] = useState(0);
 	const totalPages = useRef(1);
 	const [error, setError] = useState(false);
+	const [edit, setEdit] = useState(null);
 
 	const leftHandler = () => {
 		if (page > 0) {
@@ -34,7 +36,7 @@ export default function ViewDetails() {
 				setError(true);
 			} else {
 				cb();
-				setData(data.result);
+				setData(filterData(data.result));
 				totalPages.current = data.totalPages || totalPages.current;
 			}
 			setLoading(false);
@@ -45,7 +47,7 @@ export default function ViewDetails() {
 		setData(data.filter((d) => d.uid !== uid));
 	};
 	const editHandler = (uid) => {
-		alert(uid);
+		setEdit(uid);
 	};
 	const getTd = () => {
 		return data.map((d) => (
@@ -63,8 +65,29 @@ export default function ViewDetails() {
 			</tr>
 		));
 	};
+	const handleEditCb = (eData) => {
+		setData(
+			data.map((d) => {
+				if (d.uid === edit) return eData;
+				else return d;
+			})
+		);
+		closeHandler();
+	};
+	const closeHandler = () => {
+		setEdit(null);
+	};
 	return (
 		<div className="view">
+			{edit ? (
+				<Popup closeHandler={closeHandler}>
+					<AddForm
+						editCB={handleEditCb}
+						edit={true}
+						values={data.filter((d) => d.uid === edit)[0]}
+					/>
+				</Popup>
+			) : null}
 			{loading ? (
 				<div>Loading</div>
 			) : error ? (
@@ -112,4 +135,18 @@ function getTh() {
 			<th>Contact Number</th>
 		</tr>
 	);
+}
+
+function filterData(data) {
+	return data.map((d) => {
+		return {
+			...d,
+			reg_date: getDate(new Date(d["reg_date"])),
+			exp_date: getDate(new Date(d["exp_date"])),
+		};
+	});
+}
+
+function getDate(date) {
+	return `${date.getFullYear()}\\${date.getMonth() + 1}\\${date.getDate()}`;
 }

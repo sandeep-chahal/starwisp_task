@@ -1,27 +1,42 @@
 import React, { useRef, useState } from "react";
 import "./style.scss";
-import { addDetails } from "../../utility";
+import { addDetails, editDetail } from "../../utility";
 import Popup from "../popup";
 
-export default function AddForm({ setView, values = {} }) {
+export default function AddForm({
+	edit = false,
+	setView,
+	values = {},
+	editCB,
+}) {
 	const [loading, setLoading] = useState(false);
 	const [popup, setPopup] = useState(false);
-	const formValues = useRef(values);
+	const [formValues, setFormValues] = useState(values);
 	const submitHandler = (e) => {
 		e.preventDefault();
 		if (loading) return;
 		setLoading(true);
-		addDetails(formValues.current)
-			.then(() => {
-				setView("view");
-			})
-			.catch((err) => {
-				setPopup(true);
-				setLoading(false);
-			});
+		if (edit) {
+			editDetail(formValues);
+			editCB(formValues);
+		} else {
+			addDetails(formValues)
+				.then(() => {
+					setView("view");
+				})
+				.catch((err) => {
+					setPopup(true);
+					setLoading(false);
+				});
+		}
 	};
 	const handleInputChange = (e) => {
-		formValues.current[e.target.name] = e.target.value;
+		const name = e.target.name;
+		const value = e.target.value;
+		setFormValues((prev) => ({
+			...formValues,
+			[name]: value,
+		}));
 	};
 	return (
 		<form className="add-form">
@@ -75,7 +90,7 @@ export default function AddForm({ setView, values = {} }) {
 						type="text"
 						name="web_url"
 						placeholder="http://exaple.com"
-						value={formValues["url"]}
+						value={formValues["web_url"]}
 						onChange={handleInputChange}
 					/>
 				</div>
