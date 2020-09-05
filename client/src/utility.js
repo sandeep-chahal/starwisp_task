@@ -32,3 +32,16 @@ export const logout = (dispatch) => {
 		type: "LOGOUT",
 	});
 };
+export const addDetails = async (data) => {
+	const res = await axios.post("/add-details", data);
+	return res;
+};
+export const getDetails = async (page, cb) => {
+	try {
+		const res = await axios.get("/get-details?page=" + page);
+		if (!res.data.error) cb(res.data, null);
+		else cb(null, true);
+	} catch (err) {
+		cb(null, true);
+	}
+};

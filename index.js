@@ -5,6 +5,7 @@ var jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const path = require("path");
 const { authenticate, createAndSendJWTToken } = require("./utility");
+const { CLIENT_RENEG_WINDOW } = require("tls");
 
 dotenv.config();
 
@@ -67,6 +68,65 @@ app.post("/login", (req, res, next) => {
 app.get("/logout", (req, res, next) => {
 	res.cookie("jwtToken", "");
 	res.json({ error: false, msg: "success" });
+});
+app.post("/add-details", authenticate, async (req, res, next) => {
+	try {
+		const data = req.body;
+		if (!Object.values(data) === 9)
+			return res
+				.status(400)
+				.json({ error: true, msg: "Please Enter Valid Data" });
+		const query = "INSERT INTO uni_details VALUES (?)";
+		db.query(query, data, (err, result) => {
+			if (err) {
+				console.log(err);
+				res.status(400).json({ error: true, msg: "Please Enter Valid Data" });
+			} else return res.json({ error: false, msg: "success" });
+		});
+	} catch (err) {
+		console.log("+-----------------------------------------------");
+		console.log(err);
+		res.status(400).json({ error: true, msg: "Please Enter Valid Data" });
+	}
+});
+app.get("/get-details", async (req, res) => {
+	const page = req.query.page;
+	try {
+		db.query(
+			`SELECT * FROM uni_details LIMIT ${page * 3}, 3`,
+			(err, result, feilds) => {
+				if (err) {
+					console.log(err.message);
+					return res.status(400).json({ error: true, msg: err.message });
+				}
+				if (page === "0") {
+					db.query(
+						"SELECT COUNT(*) AS total from uni_details",
+						(err, results) => {
+							if (err)
+								res
+									.status(400)
+									.json({ error: true, msg: "Something Went Wrong" });
+							else {
+								res.json({
+									error: false,
+									msg: "Success",
+									result,
+									totalPages: Math.ceil(results[0].total / 3),
+								});
+							}
+						}
+					);
+				} else {
+					res.json({ error: false, msg: "Success", result });
+				}
+			}
+		);
+	} catch (err) {
+		console.log("+-----------------------------------------------");
+		console.log(err);
+		res.status(400).json({ error: true, msg: "Something Went Wrong" });
+	}
 });
 
 if (process.env.NODE_ENV === "production") {

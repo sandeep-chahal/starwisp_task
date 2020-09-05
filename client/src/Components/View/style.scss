@@ -1,0 +1,37 @@
+.view {
+	.table-wrapper {
+		margin: auto;
+		margin-top: 5rem;
+		border: 1px solid #ccc;
+		width: 54rem;
+	}
+	table {
+		th,
+		td {
+			padding: 0.5rem;
+		}
+		tr:first-child {
+			background-color: #000;
+			th {
+				color: #fff;
+			}
+		}
+	}
+	.btns {
+		display: flex;
+		div {
+			&.disabled {
+				opacity: 0.5;
+				&:hover {
+					background-color: transparent;
+					cursor: auto;
+				}
+			}
+			margin-right: 1rem;
+			cursor: pointer;
+			&:hover {
+				background-color: #ccc;
+			}
+		}
+	}
+}
