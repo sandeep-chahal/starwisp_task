@@ -6,6 +6,12 @@ const Reducer = (state, action) => {
 				user: action.payload.user,
 				initialLoad: false,
 			};
+		case "LOGOUT":
+			return {
+				...state,
+				user: null,
+				initialLoad: false,
+			};
 		default:
 			return state;
 	}

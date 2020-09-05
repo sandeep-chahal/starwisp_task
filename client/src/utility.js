@@ -26,6 +26,9 @@ export const login = async (user_id, password) => {
 		return null;
 	}
 };
-export const logout = () => {
+export const logout = (dispatch) => {
 	axios.get("/logout");
+	dispatch({
+		type: "LOGOUT",
+	});
 };
