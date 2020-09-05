@@ -1,0 +1,21 @@
+.spinner-wrapper {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.spinner-wrapper .circle {
+	width: 5rem;
+	height: 5rem;
+	border-radius: 100%;
+	background-color: transparent;
+	border-top: 2px solid #000;
+	border-left: 2px solid #000;
+	animation: spin 0.5s linear infinite;
+}
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}

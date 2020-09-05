@@ -48,11 +48,13 @@ app.post("/login", (req, res, next) => {
 					return res.send({ error: true, msg: "something went wrong!" });
 				if (result.length && password === result[0].password) {
 					createAndSendJWTToken(user_id, res);
-					return res.status(200).send({ error: false, msg: "logged in" });
+					return res
+						.status(200)
+						.send({ error: false, msg: "logged in", user: user_id });
 				} else {
 					return res
 						.status(401)
-						.send({ error: true, msg: "Invalid Credentials", user: user_id });
+						.send({ error: true, msg: "Invalid Credentials" });
 				}
 			}
 		);

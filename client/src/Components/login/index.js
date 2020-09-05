@@ -1,16 +1,25 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import "./style.css";
 import { login } from "../../utility";
+import { Context } from "../../store/store";
 
-export default ({ setUser }) => {
+export default () => {
+	const [state, dispatch] = useContext(Context);
 	const user_id = useRef("");
 	const password = useRef("");
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		login(user_id.current, password.current).then((data) => {
-			if (data.user) {
-				setUser(data.user);
+		login(user_id.current, password.current).then((user) => {
+			if (user)
+				dispatch({
+					type: "SET_USER",
+					payload: {
+						user,
+					},
+				});
+			else {
+				alert("invalid");
 			}
 		});
 	};

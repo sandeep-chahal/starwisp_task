@@ -14,11 +14,17 @@ export const getUser = async (dispatch) => {
 };
 
 export const login = async (user_id, password) => {
-	const data = await axios.post("/login", {
-		user_id,
-		password,
-	});
-	return data;
+	try {
+		const data = await axios.post("/login", {
+			user_id,
+			password,
+		});
+		if (data.data && data.data.user) {
+			return data.data.user;
+		} else return null;
+	} catch (err) {
+		return null;
+	}
 };
 export const logout = () => {
 	axios.get("/logout");
