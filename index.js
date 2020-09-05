@@ -69,6 +69,14 @@ app.get("/logout", (req, res, next) => {
 	res.cookie("jwtToken", "");
 	res.json({ error: false, msg: "success" });
 });
+app.get("/delete-detail", (req, res, next) => {
+	const uid = req.query.uid;
+	console.log(uid);
+	db.query("DELETE FROM uni_details WHERE uid = ?", [uid], (err, result) => {
+		console.log(err);
+	});
+	res.json({ error: false, msg: "success" });
+});
 app.post("/add-details", authenticate, async (req, res, next) => {
 	try {
 		const data = req.body;

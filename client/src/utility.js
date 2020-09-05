@@ -36,6 +36,9 @@ export const addDetails = async (data) => {
 	const res = await axios.post("/add-details", data);
 	return res;
 };
+export const deleteDetail = async (uid) => {
+	axios.get("/delete-detail?uid=" + uid);
+};
 export const getDetails = async (page, cb) => {
 	try {
 		const res = await axios.get("/get-details?page=" + page);

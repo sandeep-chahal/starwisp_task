@@ -17,6 +17,10 @@
 			}
 		}
 	}
+	.edit-btn,
+	.delete-btn {
+		cursor: pointer;
+	}
 	.btns {
 		display: flex;
 		div {

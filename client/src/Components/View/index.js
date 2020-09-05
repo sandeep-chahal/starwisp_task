@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./style.scss";
-import { getDetails } from "../../utility";
+import { getDetails, deleteDetail } from "../../utility";
 import Popup from "../popup";
 
 export default function ViewDetails() {
@@ -40,12 +40,26 @@ export default function ViewDetails() {
 			setLoading(false);
 		});
 	};
+	const deleteHandler = (uid) => {
+		deleteDetail(uid);
+		setData(data.filter((d) => d.uid !== uid));
+	};
+	const editHandler = (uid) => {
+		alert(uid);
+	};
 	const getTd = () => {
 		return data.map((d) => (
 			<tr>
 				{Object.values(d).map((d, i) => (
 					<td key={i}>{d || "Null"}</td>
 				))}
+				<td className="edit-btn" onClick={() => editHandler(d.uid)}>
+					{" "}
+					Edit
+				</td>
+				<td onClick={() => deleteHandler(d.uid)} className="delete-btn">
+					Delete
+				</td>
 			</tr>
 		));
 	};
