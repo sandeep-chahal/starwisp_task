@@ -28,9 +28,10 @@ db.connect((err) => {
 
 // routes
 app.get("/user", authenticate, (req, res, next) => {
-	res.status(401).json({
+	res.json({
 		error: false,
 		msg: "authorized",
+		user: req.user.name,
 	});
 });
 app.post("/login", (req, res, next) => {
@@ -51,7 +52,7 @@ app.post("/login", (req, res, next) => {
 				} else {
 					return res
 						.status(401)
-						.send({ error: true, msg: "Invalid Credentials" });
+						.send({ error: true, msg: "Invalid Credentials", user: user_id });
 				}
 			}
 		);
