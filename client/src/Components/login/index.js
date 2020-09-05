@@ -1,15 +1,19 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useState } from "react";
 import "./style.scss";
 import { login } from "../../utility";
 import { Context } from "../../store/store";
+import Popup from "../popup";
 
 export default () => {
 	const [state, dispatch] = useContext(Context);
 	const user_id = useRef("");
 	const password = useRef("");
+	const [popup, setPopup] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		setLoading(true);
 		login(user_id.current, password.current).then((user) => {
 			if (user)
 				dispatch({
@@ -19,12 +23,16 @@ export default () => {
 					},
 				});
 			else {
-				alert("invalid");
+				setPopup(true);
+				setLoading(false);
 			}
 		});
 	};
 	return (
 		<form onSubmit={handleSubmit} className="login">
+			{popup && (
+				<Popup msg="Invalid Credentials" closeHandler={() => setPopup(false)} />
+			)}
 			<div className="form-wrapper">
 				<h1>Login</h1>
 				<div className="input-wrapper">
@@ -41,7 +49,7 @@ export default () => {
 						onChange={(e) => (password.current = e.target.value)}
 					/>
 				</div>
-				<button type="submit">Submit</button>
+				<button type="submit">{!loading ? "Submit" : "Wait!"}</button>
 			</div>
 		</form>
 	);
